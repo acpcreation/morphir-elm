@@ -11,7 +11,7 @@ jobs:
       SonatypeUrl: 'https://finos.sonatype.app/platform/'
       SonatypeAppId: 'morphir-elm'
       SonatypeStage: 'build'
-      SonatypeScanTarget: "."
+      SonatypeScanTarget: "./redistributable/SpringBoot/pom.xml package-lock.json"
       ExcludeDirectory: " -D dirExcludes='**/website, **/.*'"
       
     steps:
@@ -20,8 +20,6 @@ jobs:
     - name: TESTING (TEMP)
       run: |
         ls
-        pwd
-        echo ${{ secrets.sonatype_user }}
     
     - name: Sonatype Lifecycle Software Composition Analysis (SCA) Scan
       uses: sonatype-nexus-community/iq-github-action@master
