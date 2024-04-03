@@ -12,14 +12,10 @@ jobs:
       SonatypeAppId: 'morphir-elm'
       SonatypeStage: 'build'
       SonatypeScanTarget: "./redistributable/SpringBoot/pom.xml package-lock.json"
-      ExcludeDirectory: " -D dirExcludes='**/website, **/.*'"
+      ExcludeDirectory: " -D dirExcludes='**/website, **/docs, **/.*'"
       
     steps:
     - uses: actions/checkout@v1
-
-    - name: TESTING (TEMP)
-      run: |
-        ls
     
     - name: Sonatype Lifecycle Software Composition Analysis (SCA) Scan
       uses: sonatype-nexus-community/iq-github-action@master
