@@ -11,11 +11,17 @@ jobs:
       SonatypeUrl: 'https://finos.sonatype.app/platform/'
       SonatypeAppId: 'morphir-elm'
       SonatypeStage: 'build'
-      SonatypeScanTarget: "*"
+      SonatypeScanTarget: "."
       ExcludeDirectory: " -D dirExcludes='**/website, **/.*'"
       
     steps:
     - uses: actions/checkout@v1
+
+    - name: TESTING (TEMP)
+      run: |
+        ls
+        pwd
+        echo ${{ secrets.sonatype_user }}
     
     - name: Sonatype Lifecycle Software Composition Analysis (SCA) Scan
       uses: sonatype-nexus-community/iq-github-action@master
