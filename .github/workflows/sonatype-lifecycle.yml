@@ -25,7 +25,7 @@ jobs:
         serverUrl: ${{ env.SonatypeUrl }}
         applicationId: ${{ env.SonatypeAppId }}
         stage: 'stage-release'
-        target: ${{ env.SonatypeScanTarget }} 
+        target: '.'
     
     - name: Sonatype Lifecycle Software Composition Analysis (SCA) Scan
       uses: sonatype-nexus-community/iq-github-action@master
