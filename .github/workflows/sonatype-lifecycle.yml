@@ -1,0 +1,33 @@
+name: Sonatype Lifecycle Evaluation
+
+on: workflow_dispatch
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    env:
+      SonatypeUrl: 'https://finos.sonatype.app/platform'
+      SonatypeAppId: 'morphir-scala'
+      SonatypeStage: 'build'
+      SonatypeScanTarget: "*"
+      ExcludeDirectory: " -D dirExcludes='**/website, **/.*'"
+      
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: TESTING (TEMP)
+      run: |
+        ls
+        pwd
+    
+    - name: Sonatype Lifecycle Software Composition Analysis (SCA) Scan
+      uses: sonatype-nexus-community/iq-github-action@master
+      with:
+        username: ${{ secrets.sonatype_user }}
+        password: ${{ secrets.sonatype_password }}
+        serverUrl: ${{ env.SonatypeUrl }}
+        applicationId: ${{ env.SonatypeAppId }}
+        stage: ${{ env.SonatypeStage }}
+        target: ${{ env.SonatypeScanTarget }} ${{ env.ExcludeDirectory }}
