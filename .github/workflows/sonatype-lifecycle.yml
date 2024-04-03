@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      SonatypeUrl: 'https://finos.sonatype.app/platform'
+      SonatypeUrl: 'https://finos.sonatype.app/platform/'
       SonatypeAppId: 'morphir-elm'
       SonatypeStage: 'build'
       SonatypeScanTarget: "*"
@@ -25,4 +25,4 @@ jobs:
         serverUrl: ${{ env.SonatypeUrl }}
         applicationId: ${{ env.SonatypeAppId }}
         stage: ${{ env.SonatypeStage }}
-        target: ${{ env.SonatypeScanTarget }} ${{ env.ExcludeDirectory }}
+        target: ${{ env.SonatypeScanTarget }}
