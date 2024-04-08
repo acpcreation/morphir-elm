@@ -14,10 +14,7 @@ jobs:
       SonatypeScanTarget: "**/pom.xml **/package-lock.json"
       ExcludeDirectory: " -D dirExcludes='**/website/, **/docs/, **/.*'"
       SonatypeStageRelease: 'release'
-
-    strategy:
-      matrix:
-        node-version: ['14.x', '16.x', '18.x']
+      
 
     steps:
     - uses: actions/checkout@v1
@@ -32,11 +29,12 @@ jobs:
         stage: ${{ env.SonatypeStageBuild }}
         target: ${{ env.SonatypeScanTarget }} ${{ env.ExcludeDirectory }}
 
-    - name: Use Node.js ${{ matrix.node-version }}
+    - uses: actions/checkout@v4
+    - name: Use Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: ${{ matrix.node-version }}
-
+        node-version: '18.x'
+        
     - run: npm install
 
     - name: Sonatype Lifecycle ( ${{ env.SonatypeStageRelease }} ) Software Composition Analysis (SCA) Scan
