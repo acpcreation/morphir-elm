@@ -10,19 +10,41 @@ jobs:
     env:
       SonatypeUrl: 'https://finos.sonatype.app/platform/'
       SonatypeAppId: 'morphir-elm'
-      SonatypeStage: 'build'
-      SonatypeScanTarget: "redistributable/SpringBoot/pom.xml package-lock.json"
+      SonatypeStageBuild: 'build'
+      SonatypeScanTarget: "**/pom.xml **/package-lock.json"
       ExcludeDirectory: " -D dirExcludes='**/website/, **/docs/, **/.*'"
-      
+      SonatypeStageRelease: 'release'
+
+    strategy:
+      matrix:
+        node-version: ['14.x', '16.x', '18.x']
+
     steps:
     - uses: actions/checkout@v1
     
-    - name: Sonatype Lifecycle Software Composition Analysis (SCA) Scan
+    - name: Sonatype Lifecycle ( ${{ env.SonatypeStageBuild }} ) Software Composition Analysis (SCA) Scan 
       uses: sonatype-nexus-community/iq-github-action@master
       with:
         username: ${{ secrets.sonatype_user }}
         password: ${{ secrets.sonatype_password }}
         serverUrl: ${{ env.SonatypeUrl }}
         applicationId: ${{ env.SonatypeAppId }}
-        stage: ${{ env.SonatypeStage }}
+        stage: ${{ env.SonatypeStageBuild }}
         target: ${{ env.SonatypeScanTarget }} ${{ env.ExcludeDirectory }}
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - run: npm install
+
+    - name: Sonatype Lifecycle ( ${{ env.SonatypeStageRelease }} ) Software Composition Analysis (SCA) Scan
+      uses: sonatype-nexus-community/iq-github-action@master
+      with:
+        username: ${{ secrets.sonatype_user }}
+        password: ${{ secrets.sonatype_password }}
+        serverUrl: ${{ env.SonatypeUrl }}
+        applicationId: ${{ env.SonatypeAppId }}
+        stage: ${{ env.SonatypeStageRelease }}
+        target: . ${{ env.ExcludeDirectory }}
