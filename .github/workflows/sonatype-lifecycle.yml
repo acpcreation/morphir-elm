@@ -45,4 +45,4 @@ jobs:
         serverUrl: ${{ env.SonatypeUrl }}
         applicationId: ${{ env.SonatypeAppId }}
         stage: ${{ env.SonatypeStageRelease }}
-        target: . ${{ env.ExcludeDirectory }}
+        target: '*' ${{ env.ExcludeDirectory }}
