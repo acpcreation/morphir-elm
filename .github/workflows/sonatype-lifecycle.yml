@@ -28,22 +28,3 @@ jobs:
         applicationId: ${{ env.SonatypeAppId }}
         stage: ${{ env.SonatypeStageBuild }}
         target: ${{ env.SonatypeScanTarget }} ${{ env.ExcludeDirectory }}
-
-
-    # - uses: actions/checkout@v4
-    # - name: Use Node.js
-    #   uses: actions/setup-node@v4
-    #   with:
-    #     node-version: '18.x'
-        
-    # - run: npm install
-
-    # - name: Sonatype Lifecycle ( ${{ env.SonatypeStageRelease }} ) Software Composition Analysis (SCA) Scan
-    #   uses: sonatype-nexus-community/iq-github-action@master
-    #   with:
-    #     username: ${{ secrets.sonatype_user }}
-    #     password: ${{ secrets.sonatype_password }}
-    #     serverUrl: ${{ env.SonatypeUrl }}
-    #     applicationId: ${{ env.SonatypeAppId }}
-    #     stage: ${{ env.SonatypeStageRelease }}
-    #     target: '*' ${{ env.ExcludeDirectory }}
