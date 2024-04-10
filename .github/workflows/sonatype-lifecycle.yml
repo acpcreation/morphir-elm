@@ -11,9 +11,9 @@ jobs:
       SonatypeUrl: 'https://finos.sonatype.app/platform/'
       SonatypeAppId: 'morphir-elm'
       SonatypeStageBuild: 'build'
-      SonatypeScanTarget: '/redistributable/SpringBoot/pom.xml package-lock.json cadl-Frontend/package-lock.json morphir-decoration-extension/package-lock.json redistributable/TypeSpec/sdk/package-lock.json server/package-lock.json'
+      SonatypeScanTarget: 'pom.xml package-lock.json'
       ExcludeDirectory: " -D dirExcludes='**/website/, **/docs/, **/.*'"
-      SonatypeStageRelease: 'release'
+      # SonatypeStageRelease: 'release'
       
 
     steps:
@@ -29,20 +29,21 @@ jobs:
         stage: ${{ env.SonatypeStageBuild }}
         target: ${{ env.SonatypeScanTarget }} ${{ env.ExcludeDirectory }}
 
-    - uses: actions/checkout@v4
-    - name: Use Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18.x'
-        
-    - run: npm install
 
-    - name: Sonatype Lifecycle ( ${{ env.SonatypeStageRelease }} ) Software Composition Analysis (SCA) Scan
-      uses: sonatype-nexus-community/iq-github-action@master
-      with:
-        username: ${{ secrets.sonatype_user }}
-        password: ${{ secrets.sonatype_password }}
-        serverUrl: ${{ env.SonatypeUrl }}
-        applicationId: ${{ env.SonatypeAppId }}
-        stage: ${{ env.SonatypeStageRelease }}
-        target: '*' ${{ env.ExcludeDirectory }}
+    # - uses: actions/checkout@v4
+    # - name: Use Node.js
+    #   uses: actions/setup-node@v4
+    #   with:
+    #     node-version: '18.x'
+        
+    # - run: npm install
+
+    # - name: Sonatype Lifecycle ( ${{ env.SonatypeStageRelease }} ) Software Composition Analysis (SCA) Scan
+    #   uses: sonatype-nexus-community/iq-github-action@master
+    #   with:
+    #     username: ${{ secrets.sonatype_user }}
+    #     password: ${{ secrets.sonatype_password }}
+    #     serverUrl: ${{ env.SonatypeUrl }}
+    #     applicationId: ${{ env.SonatypeAppId }}
+    #     stage: ${{ env.SonatypeStageRelease }}
+    #     target: '*' ${{ env.ExcludeDirectory }}
