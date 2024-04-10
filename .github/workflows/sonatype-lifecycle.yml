@@ -11,7 +11,7 @@ jobs:
       SonatypeUrl: 'https://finos.sonatype.app/platform/'
       SonatypeAppId: 'morphir-elm'
       SonatypeStageBuild: 'build'
-      SonatypeScanTarget: 'package-lock.json'
+      SonatypeScanTarget: 'package-lock.json redistributable/SpringBoot/pom.xml'
       ExcludeDirectory: " -D dirExcludes='**/website/, **/docs/, **/.*'"
       # SonatypeStageRelease: 'release'
       
