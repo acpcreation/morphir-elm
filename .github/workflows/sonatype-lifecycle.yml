@@ -38,7 +38,7 @@ jobs:
         echo 'Internal app ID: '${array[5]}
         internalID=${array[5]}
         curl -u $iqCredentials --location $SonatypeUrl'api/v2/spdx/'$internalID'/stages/'$SonatypeStage -H 'Accept: application/xml' > Sonatype-SBOM.json
-        echo 'Sonatype SBOM: '
+        echo 'Sonatype SPDX SBOM: '
         cat Sonatype-SBOM.json
 
     
