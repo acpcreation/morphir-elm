@@ -10,7 +10,7 @@ jobs:
     env:
       SonatypeUrl: 'https://finos.sonatype.app/platform/'
       SonatypeAppId: 'morphir-elm'
-      SonatypeStageBuild: 'build'
+      SonatypeStage: 'build'
       SonatypeScanTarget: 'package-lock.json redistributable/SpringBoot/pom.xml'
       ExcludeDirectory: " -D dirExcludes='**/website/, **/docs/, **/.*'"
       # SonatypeStageRelease: 'release'
@@ -19,12 +19,26 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     
-    - name: Sonatype Lifecycle ( ${{ env.SonatypeStageBuild }} ) Software Composition Analysis (SCA) Scan 
+    - name: Sonatype Lifecycle Software Composition Analysis (SCA) Scan 
       uses: sonatype-nexus-community/iq-github-action@master
       with:
         username: ${{ secrets.sonatype_user }}
         password: ${{ secrets.sonatype_password }}
         serverUrl: ${{ env.SonatypeUrl }}
         applicationId: ${{ env.SonatypeAppId }}
-        stage: ${{ env.SonatypeStageBuild }}
+        stage: ${{ env.SonatypeStage }}
         target: ${{ env.SonatypeScanTarget }} ${{ env.ExcludeDirectory }}
+
+    - name: Retrieve Sonatype SPDX SBOM
+      run: |
+        iqCredentials=${{ secrets.sonatype_user }}:${{ secrets.sonatype_password }}
+        echo 'Get internal app ID for '$SonatypeAppId
+        res=$(curl -u $iqCredentials --location $SonatypeUrl'api/v2/applications?publicId='$SonatypeAppId)
+        IFS='"' read -a array <<< "$res"
+        echo 'Internal app ID: '${array[5]}
+        internalID=${array[5]}
+        curl -u $iqCredentials --location $SonatypeUrl'api/v2/spdx/'$internalID'/stages/'$SonatypeStage -H 'Accept: application/xml' > Sonatype-SBOM.xml
+        echo 'Sonatype SBOM: '
+        cat Sonatype-SBOM.xml
+
+    
