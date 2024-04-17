@@ -37,8 +37,8 @@ jobs:
         IFS='"' read -a array <<< "$res"
         echo 'Internal app ID: '${array[5]}
         internalID=${array[5]}
-        curl -u $iqCredentials --location $SonatypeUrl'api/v2/spdx/'$internalID'/stages/'$SonatypeStage -H 'Accept: application/xml' > Sonatype-SBOM.json
+        curl -u $iqCredentials --location $SonatypeUrl'api/v2/spdx/'$internalID'/stages/'$SonatypeStage -H 'Accept: application/xml' > Sonatype-SBOM.spdx.json
         echo 'Sonatype SPDX SBOM: '
-        cat Sonatype-SPDX-SBOM.json
+        cat Sonatype-SBOM.spdx.json
 
     
