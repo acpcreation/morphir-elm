@@ -21,9 +21,10 @@ jobs:
 
     - name: Parse Sonatype App ID from Project
       run: |
+        owner=finos/
+        owner=acpcreation/
         appID=${{ env.SonatypeAppId }}
-        appID="${appID//finos/}"
-        appID="${appID//acpcreation/}"
+        appID="${appID//$owner/}"
         appID=${SonatypeAppId} >> $GITHUB_ENV
         echo ${{ env.SonatypeAppId }}
 
