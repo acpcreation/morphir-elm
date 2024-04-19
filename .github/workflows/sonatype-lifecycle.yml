@@ -20,7 +20,7 @@ jobs:
     - uses: actions/checkout@v1
 
     - name: Parse Sonatype App ID from Project
-    - run: |
+      run: |
         appID=${{ SonatypeAppId }}
         appID="${appID//finos/}"
         appID=${SonatypeAppId} >> $GITHUB_ENV
