@@ -19,8 +19,11 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
+    - name: Parse Sonatype App ID from Project
     - run: |
-        $SonatypeAppId="${ ${{SonatypeAppId}}//finos/}"
+        appID=${{ SonatypeAppId }}
+        appID="${appID//finos/}"
+        appID=${SonatypeAppId} >> $GITHUB_ENV
         echo $SonatypeAppId
 
     # https://github.com/marketplace/actions/nexus-iq-for-github-actions
