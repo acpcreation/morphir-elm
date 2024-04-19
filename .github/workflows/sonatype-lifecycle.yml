@@ -21,10 +21,10 @@ jobs:
 
     - name: Parse Sonatype App ID from Project
       run: |
-        appID=${{ SonatypeAppId }}
+        appID=${{ env.SonatypeAppId }}
         appID="${appID//finos/}"
         appID=${SonatypeAppId} >> $GITHUB_ENV
-        echo $SonatypeAppId
+        echo ${{ env.SonatypeAppId }}
 
     # https://github.com/marketplace/actions/nexus-iq-for-github-actions
     # - name: Sonatype Lifecycle Software Composition Analysis (SCA) Scan 
