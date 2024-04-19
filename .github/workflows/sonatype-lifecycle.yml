@@ -25,7 +25,7 @@ jobs:
         owner=acpcreation/
         appID=${{ env.SonatypeAppId }}
         echo appID="${appID//$owner/}"
-        echo "::set-env name=SonatypeAppId::$appID"
+        ${{ env.SonatypeAppId }}=$appID
         echo ${{ env.SonatypeAppId }}
 
     # https://github.com/marketplace/actions/nexus-iq-for-github-actions
