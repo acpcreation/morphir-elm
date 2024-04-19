@@ -20,7 +20,7 @@ jobs:
     - uses: actions/checkout@v1
 
     - run: |
-        $SonatypeAppId="${SonatypeAppId//finos//}"
+        $SonatypeAppId="${ ${{SonatypeAppId}}//finos/}"
         echo $SonatypeAppId
 
     # https://github.com/marketplace/actions/nexus-iq-for-github-actions
