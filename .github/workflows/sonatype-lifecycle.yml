@@ -18,7 +18,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    
+
+    # https://github.com/marketplace/actions/nexus-iq-for-github-actions
     - name: Sonatype Lifecycle Software Composition Analysis (SCA) Scan 
       uses: sonatype-nexus-community/iq-github-action@master
       with:
