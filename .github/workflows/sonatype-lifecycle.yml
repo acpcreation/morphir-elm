@@ -13,7 +13,7 @@ jobs:
       SonatypeStage: 'build'
       SonatypeScanTarget: 'package-lock.json redistributable/SpringBoot/pom.xml'
       ExcludeDirectory: " -D dirExcludes='**/website/, **/docs/, **/.*'"
-      # SonatypeStageRelease: 'release'
+      SonatypeStageRelease: 'release'
       
 
     steps:
@@ -40,5 +40,24 @@ jobs:
         curl -u $iqCredentials --location $SonatypeUrl'api/v2/spdx/'$internalID'/stages/'$SonatypeStage -H 'Accept: application/xml' > Sonatype-SBOM.spdx.json
         echo 'Sonatype SPDX SBOM: '
         cat Sonatype-SBOM.spdx.json
+
+
+      
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18.x'
+        
+    - run: npm install
+
+    - name: Sonatype Lifecycle (release) Software Composition Analysis (SCA) Scan
+      uses: sonatype-nexus-community/iq-github-action@master
+      with:
+        username: ${{ secrets.sonatype_user }}
+        password: ${{ secrets.sonatype_password }}
+        serverUrl: ${{ env.SonatypeUrl }}
+        applicationId: ${{ env.SonatypeAppId }}
+        stage: ${{ env.SonatypeStageRelease }}
+        target: . ${{ env.ExcludeDirectory }}
 
     
