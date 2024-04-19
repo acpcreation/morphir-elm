@@ -29,35 +29,42 @@ jobs:
         stage: ${{ env.SonatypeStage }}
         target: ${{ env.SonatypeScanTarget }} ${{ env.ExcludeDirectory }}
 
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18.x'
+        
+    - run: npm install --omit=dev
+
+    - name: Sonatype Lifecycle Software Composition Analysis (SCA) RELEASE Scan
+      uses: sonatype-nexus-community/iq-github-action@master
+      with:
+        username: ${{ secrets.sonatype_user }}
+        password: ${{ secrets.sonatype_password }}
+        serverUrl: ${{ env.SonatypeUrl }}
+        applicationId: ${{ env.SonatypeAppId }}
+        stage: ${{ env.SonatypeStageRelease }}
+        target: . ${{ env.ExcludeDirectory }}
+
+
     - name: Retrieve Sonatype SPDX SBOM
       run: |
         iqCredentials=${{ secrets.sonatype_user }}:${{ secrets.sonatype_password }}
-        echo 'Get internal app ID for '$SonatypeAppId
+        echo 'Get internal app ID for public ID: '$SonatypeAppId
         res=$(curl -u $iqCredentials --location $SonatypeUrl'api/v2/applications?publicId='$SonatypeAppId)
         IFS='"' read -a array <<< "$res"
         echo 'Internal app ID: '${array[5]}
         internalID=${array[5]}
-        curl -u $iqCredentials --location $SonatypeUrl'api/v2/spdx/'$internalID'/stages/'$SonatypeStage -H 'Accept: application/xml' > Sonatype-SBOM.spdx.json
+        curl -u $iqCredentials --location $SonatypeUrl'api/v2/spdx/'$internalID'/stages/'$SonatypeStage -H 'Accept: application/xml' > reports/Sonatype-SBOM.spdx.json
         echo 'Sonatype SPDX SBOM: '
-        cat Sonatype-SBOM.spdx.json
+        cat reports/Sonatype-SBOM.spdx.json
 
-
-      
-    # - name: Use Node.js
-    #   uses: actions/setup-node@v4
-    #   with:
-    #     node-version: '18.x'
-        
-    # - run: npm install
-
-    # - name: Sonatype Lifecycle Software Composition Analysis (SCA) RELEASE Scan
-    #   uses: sonatype-nexus-community/iq-github-action@master
-    #   with:
-    #     username: ${{ secrets.sonatype_user }}
-    #     password: ${{ secrets.sonatype_password }}
-    #     serverUrl: ${{ env.SonatypeUrl }}
-    #     applicationId: ${{ env.SonatypeAppId }}
-    #     stage: ${{ env.SonatypeStageRelease }}
-    #     target: . ${{ env.ExcludeDirectory }}
+    - name: Upload Sonatype SBOM
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: Sonatype Report
+        path: ${{ github.workspace }}/reports
 
     
