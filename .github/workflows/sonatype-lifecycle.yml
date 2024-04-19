@@ -23,9 +23,9 @@ jobs:
       run: |
         owner=finos/
         owner=acpcreation/
-        appID=${{ env.SonatypeAppId }}
-        echo appID="${appID//$owner/}"
-        ${{ env.SonatypeAppId }}=$appID
+        SonatypeAppId=${{ env.SonatypeAppId }}
+        echo SonatypeAppId="${SonatypeAppId//$owner/}"
+        echo "SonatypeAppId=${SonatypeAppId}" >> $GITHUB_ENV
         echo ${{ env.SonatypeAppId }}
 
     # https://github.com/marketplace/actions/nexus-iq-for-github-actions
