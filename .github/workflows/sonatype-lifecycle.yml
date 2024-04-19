@@ -23,6 +23,7 @@ jobs:
       run: |
         appID=${{ env.SonatypeAppId }}
         appID="${appID//finos/}"
+        appID="${appID//acpcreation/}"
         appID=${SonatypeAppId} >> $GITHUB_ENV
         echo ${{ env.SonatypeAppId }}
 
