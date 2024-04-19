@@ -19,15 +19,15 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     
-    - name: Sonatype Lifecycle Software Composition Analysis (SCA) Scan 
-      uses: sonatype-nexus-community/iq-github-action@master
-      with:
-        username: ${{ secrets.sonatype_user }}
-        password: ${{ secrets.sonatype_password }}
-        serverUrl: ${{ env.SonatypeUrl }}
-        applicationId: ${{ env.SonatypeAppId }}
-        stage: ${{ env.SonatypeStage }}
-        target: ${{ env.SonatypeScanTarget }} ${{ env.ExcludeDirectory }}
+    # - name: Sonatype Lifecycle Software Composition Analysis (SCA) Scan 
+    #   uses: sonatype-nexus-community/iq-github-action@master
+    #   with:
+    #     username: ${{ secrets.sonatype_user }}
+    #     password: ${{ secrets.sonatype_password }}
+    #     serverUrl: ${{ env.SonatypeUrl }}
+    #     applicationId: ${{ env.SonatypeAppId }}
+    #     stage: ${{ env.SonatypeStage }}
+    #     target: ${{ env.SonatypeScanTarget }} ${{ env.ExcludeDirectory }}
 
     - name: Retrieve Sonatype SPDX SBOM
       run: |
