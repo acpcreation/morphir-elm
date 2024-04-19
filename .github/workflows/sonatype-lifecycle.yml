@@ -50,6 +50,7 @@ jobs:
 
     - name: Retrieve Sonatype SPDX SBOM
       run: |
+        mkdir reports/
         iqCredentials=${{ secrets.sonatype_user }}:${{ secrets.sonatype_password }}
         echo 'Get internal app ID for public ID: '$SonatypeAppId
         res=$(curl -u $iqCredentials --location $SonatypeUrl'api/v2/applications?publicId='$SonatypeAppId)
