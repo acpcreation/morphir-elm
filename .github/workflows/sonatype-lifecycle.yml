@@ -9,8 +9,8 @@ jobs:
 
     env:
       SonatypeUrl: 'https://finos.sonatype.app/platform/'
-      SonatypeAppId: 'morphir-elm'
-      SonatypeStage: 'build'
+      SonatypeAppId: ${{ github.repository }}
+      SonatypeStage: ${{ github.job }}
       SonatypeScanTarget: 'package-lock.json redistributable/SpringBoot/pom.xml'
       ExcludeDirectory: " -D dirExcludes='**/website/, **/docs/, **/.*'"
       SonatypeStageRelease: 'release'
@@ -19,54 +19,58 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
+    - run: |
+        $SonatypeAppId="${SonatypeAppId//finos//}"
+        echo $SonatypeAppId
+
     # https://github.com/marketplace/actions/nexus-iq-for-github-actions
-    - name: Sonatype Lifecycle Software Composition Analysis (SCA) Scan 
-      uses: sonatype-nexus-community/iq-github-action@master
-      with:
-        username: ${{ secrets.sonatype_user }}
-        password: ${{ secrets.sonatype_password }}
-        serverUrl: ${{ env.SonatypeUrl }}
-        applicationId: ${{ env.SonatypeAppId }}
-        stage: ${{ env.SonatypeStage }}
-        target: ${{ env.SonatypeScanTarget }} ${{ env.ExcludeDirectory }}
+    # - name: Sonatype Lifecycle Software Composition Analysis (SCA) Scan 
+    #   uses: sonatype-nexus-community/iq-github-action@master
+    #   with:
+    #     username: ${{ secrets.sonatype_user }}
+    #     password: ${{ secrets.sonatype_password }}
+    #     serverUrl: ${{ env.SonatypeUrl }}
+    #     applicationId: ${{ env.SonatypeAppId }}
+    #     stage: ${{ env.SonatypeStage }}
+    #     target: ${{ env.SonatypeScanTarget }} ${{ env.ExcludeDirectory }}
 
 
-    - name: Use Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18.x'
+    # - name: Use Node.js
+    #   uses: actions/setup-node@v4
+    #   with:
+    #     node-version: '18.x'
         
-    - run: npm install --omit=dev
+    # - run: npm install --omit=dev
 
-    - name: Sonatype Lifecycle Software Composition Analysis (SCA) RELEASE Scan
-      uses: sonatype-nexus-community/iq-github-action@master
-      with:
-        username: ${{ secrets.sonatype_user }}
-        password: ${{ secrets.sonatype_password }}
-        serverUrl: ${{ env.SonatypeUrl }}
-        applicationId: ${{ env.SonatypeAppId }}
-        stage: ${{ env.SonatypeStageRelease }}
-        target: . ${{ env.ExcludeDirectory }}
+    # - name: Sonatype Lifecycle Software Composition Analysis (SCA) RELEASE Scan
+    #   uses: sonatype-nexus-community/iq-github-action@master
+    #   with:
+    #     username: ${{ secrets.sonatype_user }}
+    #     password: ${{ secrets.sonatype_password }}
+    #     serverUrl: ${{ env.SonatypeUrl }}
+    #     applicationId: ${{ env.SonatypeAppId }}
+    #     stage: ${{ env.SonatypeStageRelease }}
+    #     target: . ${{ env.ExcludeDirectory }}
 
 
-    - name: Retrieve Sonatype SPDX SBOM
-      run: |
-        mkdir reports/
-        iqCredentials=${{ secrets.sonatype_user }}:${{ secrets.sonatype_password }}
-        echo 'Get internal app ID for public ID: '$SonatypeAppId
-        res=$(curl -u $iqCredentials --location $SonatypeUrl'api/v2/applications?publicId='$SonatypeAppId)
-        IFS='"' read -a array <<< "$res"
-        echo 'Internal app ID: '${array[5]}
-        internalID=${array[5]}
-        curl -u $iqCredentials --location $SonatypeUrl'api/v2/spdx/'$internalID'/stages/'$SonatypeStage -H 'Accept: application/xml' > reports/Sonatype-SBOM.spdx.json
-        echo 'Sonatype SPDX SBOM: '
-        cat reports/Sonatype-SBOM.spdx.json
+    # - name: Retrieve Sonatype SPDX SBOM
+    #   run: |
+    #     mkdir reports/
+    #     iqCredentials=${{ secrets.sonatype_user }}:${{ secrets.sonatype_password }}
+    #     echo 'Get internal app ID for public ID: '$SonatypeAppId
+    #     res=$(curl -u $iqCredentials --location $SonatypeUrl'api/v2/applications?publicId='$SonatypeAppId)
+    #     IFS='"' read -a array <<< "$res"
+    #     echo 'Internal app ID: '${array[5]}
+    #     internalID=${array[5]}
+    #     curl -u $iqCredentials --location $SonatypeUrl'api/v2/spdx/'$internalID'/stages/'$SonatypeStage -H 'Accept: application/xml' > reports/Sonatype-SBOM.spdx.json
+    #     echo 'Sonatype SPDX SBOM: '
+    #     cat reports/Sonatype-SBOM.spdx.json
 
-    - name: Upload Sonatype SBOM
-      if: ${{ always() }}
-      uses: actions/upload-artifact@v2
-      with:
-        name: Sonatype Report
-        path: ${{ github.workspace }}/reports
+    # - name: Upload Sonatype SBOM
+    #   if: ${{ always() }}
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #     name: Sonatype Report
+    #     path: ${{ github.workspace }}/reports
 
     
