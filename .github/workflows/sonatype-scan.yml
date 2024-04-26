@@ -76,7 +76,7 @@ jobs:
       if: ${{ always() }}
       uses: actions/upload-artifact@v2
       with:
-        name: ${{ env.SonatypeAppId }} SBOM (SPDX) 
+        name: ${{ env.SonatypeAppId }} Sonatype SBOM (SPDX) 
         path: reports/
 
     
