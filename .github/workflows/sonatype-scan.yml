@@ -68,15 +68,15 @@ jobs:
         IFS='"' read -a array <<< "$res"
         echo 'Internal app ID: '${array[5]}
         internalID=${array[5]}
-        curl -u $iqCredentials --location $SonatypeUrl'api/v2/spdx/'$internalID'/stages/'$SonatypeStage -H 'Accept: application/xml' > reports/Sonatype-SBOM.spdx.json
+        curl -u $iqCredentials --location $SonatypeUrl'api/v2/spdx/'$internalID'/stages/'$SonatypeStage -H 'Accept: application/xml' > reports/$SonatypeAppId.spdx.json
         echo 'Sonatype SPDX SBOM: '
-        cat reports/Sonatype-SBOM.spdx.json
+        cat reports/$SonatypeAppId.spdx.json
 
-    - name: Upload Sonatype SBOM
+    - name: Upload Sonatype SPDX SBOM
       if: ${{ always() }}
       uses: actions/upload-artifact@v2
       with:
         name: Sonatype Report
-        path: ${{ github.workspace }}reports/Sonatype-SBOM.spdx.json
+        path: ${{ github.workspace }}reports/${{ env.SonatypeAppId }}.spdx.json
 
     
