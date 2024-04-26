@@ -59,7 +59,7 @@ jobs:
         target: . ${{ env.ExcludeDirectory }}
 
 
-    - name: Retrieve Sonatype SPDX SBOM
+    - name: Retrieve Sonatype SBOM (SPDX)
       run: |
         mkdir reports/
         iqCredentials=${{ secrets.sonatype_user }}:${{ secrets.sonatype_password }}
@@ -69,15 +69,14 @@ jobs:
         echo 'Internal app ID: '${array[5]}
         internalID=${array[5]}
         curl -u $iqCredentials --location $SonatypeUrl'api/v2/spdx/'$internalID'/stages/'$SonatypeStage -H 'Accept: application/xml' > reports/$SonatypeAppId.spdx.json
-        echo 'Sonatype SPDX SBOM: '
+        echo 'Sonatype SBOM (SPDX): '
         cat reports/$SonatypeAppId.spdx.json
 
-    - name: Upload Sonatype SPDX SBOM
+    - name: Upload Sonatype SBOM (SPDX)
       if: ${{ always() }}
       uses: actions/upload-artifact@v2
       with:
-        name: Sonatype Report
+        name: ${{ env.SonatypeAppId }} SBOM (SPDX) 
         path: reports/
-        # ${{ github.workspace }}
 
     
