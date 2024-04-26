@@ -60,6 +60,7 @@ jobs:
 
 
     - name: Retrieve Sonatype SBOM (SPDX)
+      if: always()
       run: |
         mkdir reports/
         iqCredentials=${{ secrets.sonatype_user }}:${{ secrets.sonatype_password }}
