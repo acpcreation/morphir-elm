@@ -77,6 +77,6 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: Sonatype Report
-        path: ${{ github.workspace }}reports/${{ env.SonatypeAppId }}.spdx.json
+        path: ${{ github.workspace }}reports/
 
     
