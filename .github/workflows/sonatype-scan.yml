@@ -77,6 +77,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: Sonatype Report
-        path: ${{ github.workspace }}reports/
+        path: reports/
+        # ${{ github.workspace }}
 
     
