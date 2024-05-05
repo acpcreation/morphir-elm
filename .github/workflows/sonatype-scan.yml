@@ -8,13 +8,10 @@ jobs:
 
     env:
       SonatypeUrl: 'https://finos.sonatype.app/platform/'
-      # SonatypeAppId: ${{ github.repository }}
       SonatypeAppId: morphir-elm
       SonatypeStage: ${{ github.job }}
-      SonatypeScanTarget: '*.json *.js *.xml *.jar'
-      ExcludeDirectory: " -D dirExcludes='**/website/, **/docs/, **/.*'"
-      # SonatypeStageRelease: 'release'
-      
+      SonatypeScanTarget: '.'
+      ExcludeDirectory: " -D dirExcludes='**/website/, **/docs/, **/.*'"      
 
     steps:
     - uses: actions/checkout@v1
@@ -35,7 +32,6 @@ jobs:
         applicationId: ${{ env.SonatypeAppId }}
         stage: ${{ env.SonatypeStage }}
         target: ${{ env.SonatypeScanTarget }} ${{ env.ExcludeDirectory }}
-
 
     - name: Retrieve Sonatype SBOM (SPDX)
       if: always()
