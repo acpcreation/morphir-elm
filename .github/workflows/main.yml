@@ -1,0 +1,11 @@
+name: MAIN TEST KICKOFF
+
+# Only trigger, when the build workflow succeeded
+on:
+
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
