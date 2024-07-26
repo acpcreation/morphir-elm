@@ -24,14 +24,24 @@ jobs:
     # - run: npm install --omit=dev
 
     - name: Sonatype Lifecycle SCA Scan
-      uses: sonatype-nexus-community/iq-github-action@master
+      id: evaluate
+      uses: sonatype/actions/evaluate@v1
       with:
+        iq-server-url: ${{ env.SonatypeUrl }}
         username: ${{ secrets.sonatype_user }}
         password: ${{ secrets.sonatype_password }}
-        serverUrl: ${{ env.SonatypeUrl }}
-        applicationId: ${{ env.SonatypeAppId }}
-        stage: ${{ env.SonatypeStage }}
-        target: ${{ env.SonatypeScanTarget }} ${{ env.ExcludeDirectory }}
+        application-id: ${{ env.SonatypeAppId }}
+        scan-targets: ${{ env.SonatypeScanTarget }} ${{ env.ExcludeDirectory }}
+
+    # - name: Sonatype Lifecycle SCA Scan
+    #   uses: sonatype-nexus-community/iq-github-action@master
+    #   with:
+    #     username: ${{ secrets.sonatype_user }}
+    #     password: ${{ secrets.sonatype_password }}
+    #     serverUrl: ${{ env.SonatypeUrl }}
+    #     applicationId: ${{ env.SonatypeAppId }}
+    #     stage: ${{ env.SonatypeStage }}
+    #     target: ${{ env.SonatypeScanTarget }} ${{ env.ExcludeDirectory }}
 
     - name: Retrieve Sonatype SBOM (SPDX)
       if: always()
